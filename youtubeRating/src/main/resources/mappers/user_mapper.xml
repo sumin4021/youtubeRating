@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="userMapper">
+	
+	<insert id="joinUsFromHome" parameterType="UserVO">
+		INSERT INTO YTR_USER 
+			(	RGST_DT, 
+				UP_DT, 
+				ID, 
+				PW, 
+				NICK_NAME,
+				GENDER,
+				AGE,
+				PLATFRM,
+				A_TOKEN,
+				R_TOKEN,
+				LVL,
+				LVL_POINT
+			) 
+		VALUES 
+			(	DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'),
+				DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'), 
+				#{ID}, 
+				#{PW},
+				#{NICK_NAME},
+				#{GENDER},
+				#{AGE},
+				'H',
+				#{A_TOKEN},
+				#{R_TOKEN},
+				'1', 
+				'0'
+			)
+	</insert>
+	
+	<select id="loginFromHome" parameterType="UserVO" resultType="UserVO">
+		SELECT * 
+		FROM YTR_USER
+		WHERE PW = #{PW}
+		AND PLATFRM = 'H'
+		LIMIT 1
+	</select>
+	
+	
+	
+	
+	<select id="isEmailOverlap" resultType="String" parameterType="UserVO">
+		SELECT ID FROM YTR_USER 
+		WHERE 1=1 
+		AND ID = #{ID}
+		AND PLATFRM = #{PLATFRM}
+		LIMIT 1
+	</select>
+	
+	
+	<select id="isNickOverlap" resultType="String" parameterType="UserVO">
+		SELECT NICK_NAME FROM YTR_USER 
+		WHERE 1=1 
+		AND NICK_NAME = #{NICK_NAME}
+		AND PLATFRM = #{PLATFRM}
+		LIMIT 1
+	</select>
+	
+	
+	
+
+	<select id="getUserInfoFromDB" parameterType="UserVO" resultType="UserVO">
+		SELECT * FROM YTR_USER
+		WHERE ID = #{ID}
+		AND PLATFRM = #{PLATFRM}
+		LIMIT 1
+	</select>
+	
+	
+</mapper>
+
+

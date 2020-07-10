@@ -1,0 +1,9 @@
+
+@media screen and (max-width:768px) {
+	.search {
+		width: 80vw;
+		margin: auto;
+	}
+	.navbar-nickname{width:auto !important;}
+	
+}

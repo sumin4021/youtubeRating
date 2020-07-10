@@ -1,0 +1,19 @@
+#boardTable_wrapper {
+	color: lightgray;
+	min-height: 415px;
+}
+
+#boardTable {
+	border-top: 1px solid lightgray;
+	margin: auto;
+	width: 100% !important;
+}
+
+#boardTable thead tr th, #boardTable tbody tr td {
+	border-bottom: 1px solid;
+	text-align: center;
+	padding: 0.5rem 0;
+}
+#boardTable tbody tr td:nth-child(3) {
+	text-align: left;
+}

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mainMapper">
+	<!-- 
+	<select id="getHotVideo" resultType="HotVideoVO">
+		SELECT IMG_SRC FROM MAIN_HOTVIDEO
+		ORDER BY PUT_DATE DESC
+		LIMIT 12
+	</select>
+	
+	<insert id="updateHotVideo" parameterType="HotVideoVO">
+		INSERT INTO MAIN_HOTVIDEO VALUES 
+		<foreach collection="list" item="item" separator=",">
+			(DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'), NULL, #{item.IMG_SRC})
+		</foreach>
+	</insert>
+	 -->
+	
+	<select id="getStreamers" parameterType="String" resultType="StreamerVO">
+		SELECT 
+			CHANNEL_ID, 
+			THUMB, 
+			CHANNEL_TITLE, 
+			CHANNEL_DESC, 
+			FORMAT(SUBSC_CNT,0) AS SUBSC_CNT, 
+			FORMAT(VIDEO_CNT,0) AS VIDEO_CNT, 
+			FORMAT(VIEW_CNT,0) AS VIEW_CNT, 
+			SUBSC_HIST,
+			VIDEO_HIST,
+			VIEW_HIST,
+			IS_HIDE, 
+			SCH_KEYWORD
+		FROM YTR_STREAMERS
+		WHERE SCH_KEYWORD LIKE '%${value}%'
+		ORDER BY CAST(SUBSC_CNT as unsigned) DESC
+		LIMIT 5
+	</select>
+	
+	<insert id="updateStreamers" parameterType="StreamerVO" >
+		INSERT INTO YTR_STREAMERS 
+			(	RGST_DT, 
+				UP_DT, 
+				CHANNEL_ID, 
+				THUMB,
+				CHANNEL_TITLE,
+				CHANNEL_DESC,
+				SUBSC_CNT,
+				SUBSC_HIST,
+				VIDEO_CNT,
+				VIDEO_HIST,
+				VIEW_CNT,
+				VIEW_HIST,
+				IS_HIDE,
+				SCH_KEYWORD
+			) 
+		VALUES 
+			(	DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'),
+				DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'),
+				#{CHANNEL_ID},
+				#{THUMB},
+				#{CHANNEL_TITLE},
+				#{CHANNEL_DESC},
+				#{SUBSC_CNT},
+				#{SUBSC_HIST},
+				#{VIDEO_CNT},
+				#{VIDEO_HIST},
+				#{VIEW_CNT},
+				#{VIEW_HIST},
+				#{IS_HIDE},
+				#{SCH_KEYWORD}
+			)
+		ON DUPLICATE KEY UPDATE
+		UP_DT = DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'),
+		THUMB = #{THUMB},
+		CHANNEL_DESC = #{CHANNEL_DESC},
+		VIDEO_CNT = #{VIDEO_CNT},
+		VIEW_CNT = #{VIEW_CNT},
+		SUBSC_CNT = #{SUBSC_CNT},
+		IS_HIDE = #{IS_HIDE},
+		SUBSC_HIST = CONCAT_WS(',',YTR_STREAMERS.SUBSC_HIST,#{SUBSC_HIST}),
+		VIDEO_HIST = CONCAT_WS(',',YTR_STREAMERS.VIDEO_HIST,#{VIDEO_HIST}),
+		VIEW_HIST = CONCAT_WS(',',YTR_STREAMERS.VIEW_HIST,#{VIEW_HIST}),
+		SCH_KEYWORD = CONCAT_WS(',',YTR_STREAMERS.SCH_KEYWORD,#{SCH_KEYWORD})
+	</insert>
+	
+</mapper>
